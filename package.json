@@ -53,6 +53,6 @@
     "typescript-eslint": "^8.52.0"
   },
   "dependencies": {
-    "puppeteer": "^24.36.0"
+    "puppeteer-core": "^24.36.0"
   }
 }

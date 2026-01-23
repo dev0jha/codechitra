@@ -1,7 +1,46 @@
 import * as vscode from "vscode";
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core";
 import * as fs from "fs";
 import * as path from "path";
+import * as os from "os";
+
+function findBrowser(): string | undefined {
+  const platform = os.platform();
+  let paths: string[] = [];
+
+  if (platform === "win32") {
+    paths = [
+      path.join(process.env["PROGRAMFILES"] || "C:\\Program Files", "Google\\Chrome\\Application\\chrome.exe"),
+      path.join(process.env["PROGRAMFILES(X86)"] || "C:\\Program Files (x86)", "Google\\Chrome\\Application\\chrome.exe"),
+      path.join(process.env["LOCALAPPDATA"] || "", "Google\\Chrome\\Application\\chrome.exe"),
+      path.join(process.env["PROGRAMFILES"] || "C:\\Program Files", "Microsoft\\Edge\\Application\\msedge.exe"),
+      path.join(process.env["PROGRAMFILES(X86)"] || "C:\\Program Files (x86)", "Microsoft\\Edge\\Application\\msedge.exe"),
+      path.join(process.env["PROGRAMFILES"] || "C:\\Program Files", "BraveSoftware\\Brave-Browser\\Application\\brave.exe"),
+    ];
+  } else if (platform === "darwin") {
+    const home = os.homedir();
+    paths = [
+      "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+      path.join(home, "Applications/Google Chrome.app/Contents/MacOS/Google Chrome"),
+      "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
+      path.join(home, "Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge"),
+      "/Applications/Brave Browser.app/Contents/MacOS/Brave Browser",
+      path.join(home, "Applications/Brave Browser.app/Contents/MacOS/Brave Browser"),
+      "/Applications/Arc.app/Contents/MacOS/Arc",
+      "/Applications/Vivaldi.app/Contents/MacOS/Vivaldi",
+    ];
+  } else if (platform === "linux") {
+    paths = [
+      "/usr/bin/google-chrome",
+      "/usr/bin/microsoft-edge",
+      "/usr/bin/brave-browser",
+      "/usr/bin/chromium-browser",
+      "/usr/bin/chromium",
+    ];
+  }
+
+  return paths.find((p) => fs.existsSync(p));
+}
 
 export function activate(context: vscode.ExtensionContext) {
   const disposable = vscode.commands.registerCommand(
@@ -11,6 +50,14 @@ export function activate(context: vscode.ExtensionContext) {
 
       if (!editor) {
         vscode.window.showErrorMessage("No active editor found");
+        return;
+      }
+
+      const executablePath = findBrowser();
+      if (!executablePath) {
+        vscode.window.showErrorMessage(
+          "Could not find Google Chrome, Microsoft Edge, or Brave. Please install one of these browsers to use CodeChitra."
+        );
         return;
       }
 
@@ -26,8 +73,8 @@ export function activate(context: vscode.ExtensionContext) {
         title: "Save Code Snapshot",
         defaultUri: vscode.Uri.file("code-snapshot.png"),
         filters: {
-          Images: ["png"]
-        }
+          Images: ["png"],
+        },
       });
 
       if (!saveUri) {
@@ -41,15 +88,26 @@ export function activate(context: vscode.ExtensionContext) {
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
 
-      const templatePath = path.join(context.extensionPath, "dist", "template.html");
+      const templatePath = path.join(
+        context.extensionPath,
+        "dist",
+        "template.html"
+      );
+      if (!fs.existsSync(templatePath)) {
+        vscode.window.showErrorMessage("Template file not found in dist folder.");
+        return;
+      }
       let html = fs.readFileSync(templatePath, "utf-8");
 
       html = html.replace("{{CODE}}", () => escapedCode);
-      html = html.replace("{{FILENAME}}", () => path.basename(editor.document.fileName));
+      html = html.replace("{{FILENAME}}", () =>
+        path.basename(editor.document.fileName)
+      );
 
       const browser = await puppeteer.launch({
         headless: true,
-        args: ["--no-sandbox", "--disable-setuid-sandbox"]
+        executablePath: executablePath,
+        args: ["--no-sandbox", "--disable-setuid-sandbox"],
       });
 
       const page = await browser.newPage();
@@ -58,7 +116,7 @@ export function activate(context: vscode.ExtensionContext) {
 
       await page.setContent(html, {
         waitUntil: "networkidle2",
-        timeout: 60000
+        timeout: 60000,
       });
 
       const container = await page.$("body");
