@@ -1,6 +1,6 @@
-# ShareCode
+# CodeChitra
 
-**ShareCode** is a VS Code extension that allows you to take beautiful, high-quality snapshots of your code snippets instantly. Perfect for sharing on social media, documentation, or presentations.
+**CodeChitra** is a VS Code extension that allows you to take beautiful, high-quality snapshots of your code snippets instantly. Perfect for sharing on social media, documentation, or presentations.
 
 ## ✨ Features
 
@@ -12,7 +12,7 @@
 
 ## 📸 Preview
 
-![ShareCode Snapshot](public/template.png)
+![CodeChitra Snapshot](public/template.png)
 
 ## 🚀 How to Use
 
@@ -25,7 +25,7 @@
 
 ## 🛠️ Installation
 
-1.  Search for **ShareCode** in the VS Code Marketplace (coming soon).
+1.  Search for **CodeChitra** in the VS Code Marketplace (coming soon).
 2.  Click **Install**.
 
 *To run locally for development:*
