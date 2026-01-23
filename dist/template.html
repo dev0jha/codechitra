@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Fira+Code:wght@400;500&display=swap"
+    rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" rel="stylesheet" />
+  <style>
+    :root {
+      --control-red: #ff5f56;
+      --control-yellow: #ffbd2e;
+      --control-green: #27c93f;
+      --font-ui: 'Poppins', sans-serif;
+      --font-code: 'Fira Code', monospace;
+    }
+
+    body {
+      margin: 0;
+      padding: 60px;
+      /* Padding for shadow overflow */
+      background: transparent;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      /* Start from top for long code */
+      min-height: initial;
+      width: fit-content;
+      font-family: var(--font-ui);
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 0, 0, 0.05);
+      border-radius: 12px;
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.12);
+      overflow: hidden;
+      min-width: 480px;
+      max-width: 95vw;
+    }
+
+    .window-header {
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.05);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    .control {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .red {
+      background-color: var(--control-red);
+    }
+
+    .yellow {
+      background-color: var(--control-yellow);
+    }
+
+    .green {
+      background-color: var(--control-green);
+    }
+
+    .window-title {
+      flex: 1;
+      text-align: center;
+      color: rgba(0, 0, 0, 0.4);
+      font-size: 13px;
+      margin-right: 52px;
+      /* Offset for controls */
+      font-weight: 600;
+    }
+
+    .code-content {
+      padding: 24px;
+      position: relative;
+    }
+
+    pre[class*="language-"] {
+      margin: 0 !important;
+      padding: 0 !important;
+      background: transparent !important;
+      font-family: var(--font-code) !important;
+      font-size: 14px !important;
+      line-height: 1.6 !important;
+    }
+
+    code[class*="language-"] {
+      font-family: var(--font-code) !important;
+      background: transparent !important;
+      text-shadow: none !important;
+      white-space: pre !important;
+      color: #333333 !important;
+    }
+
+    /* Prism Light Theme Colors Override */
+    .token.comment,
+    .token.prolog,
+    .token.doctype,
+    .token.cdata {
+      color: #708090 !important;
+    }
+
+    .token.punctuation {
+      color: #999 !important;
+    }
+
+    .token.namespace {
+      opacity: .7 !important;
+    }
+
+    .token.property,
+    .token.tag,
+    .token.boolean,
+    .token.number,
+    .token.constant,
+    .token.symbol,
+    .token.deleted {
+      color: #905 !important;
+    }
+
+    .token.selector,
+    .token.attr-name,
+    .token.string,
+    .token.char,
+    .token.builtin,
+    .token.inserted {
+      color: #690 !important;
+    }
+
+    .token.operator,
+    .token.entity,
+    .token.url,
+    .language-css .token.string,
+    .style .token.string {
+      color: #9a6e3a !important;
+    }
+
+    .token.atrule,
+    .token.attr-value,
+    .token.keyword {
+      color: #07a !important;
+    }
+
+    .token.function,
+    .token.class-name {
+      color: #DD4A68 !important;
+    }
+
+    .token.regex,
+    .token.important,
+    .token.variable {
+      color: #e90 !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="window-header">
+      <div class="controls">
+        <div class="control red"></div>
+        <div class="control yellow"></div>
+        <div class="control green"></div>
+      </div>
+      <div class="window-title">{{FILENAME}}</div>
+    </div>
+    <div class="code-content">
+      <pre class="language-typescript"><code id="code-block">{{CODE}}</code></pre>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-typescript.min.js"></script>
+  <script>
+    window.onload = () => {
+      Prism.highlightAll();
+    };
+  </script>
+</body>
+
+</html>
