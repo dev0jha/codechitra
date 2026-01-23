@@ -301648,7 +301648,7 @@ var fs7 = __toESM(require("fs"));
 var path12 = __toESM(require("path"));
 function activate(context2) {
   const disposable = vscode.commands.registerCommand(
-    "sharecode.takeCodeSnapshot",
+    "codechitra.takeCodeSnapshot",
     async () => {
       const editor = vscode.window.activeTextEditor;
       if (!editor) {
@@ -301682,7 +301682,10 @@ function activate(context2) {
       });
       const page = await browser.newPage();
       await page.setViewport({ width: 1400, height: 3e3, deviceScaleFactor: 2 });
-      await page.setContent(html, { waitUntil: "networkidle0" });
+      await page.setContent(html, {
+        waitUntil: "networkidle2",
+        timeout: 6e4
+      });
       const container = await page.$("body");
       if (container) {
         const boundingBox = await container.boundingBox();

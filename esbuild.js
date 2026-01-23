@@ -1,13 +1,10 @@
-import esbuild from "esbuild";
-import fs from "fs";
-import path from "path";
+const esbuild = require("esbuild");
+const fs = require("fs");
+const path = require("path");
 
 const production = process.argv.includes("--production");
 const watch = process.argv.includes("--watch");
 
-/**
- * @type {import('esbuild').Plugin}
- */
 const esbuildProblemMatcherPlugin = {
   name: "esbuild-problem-matcher",
 
@@ -47,7 +44,6 @@ async function main() {
     await ctx.dispose();
   }
 
-  // copy template AFTER build is done
   const src = path.join("src", "template.html");
   const dest = path.join("dist", "template.html");
   fs.copyFileSync(src, dest);

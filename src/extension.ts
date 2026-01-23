@@ -5,7 +5,7 @@ import * as path from "path";
 
 export function activate(context: vscode.ExtensionContext) {
   const disposable = vscode.commands.registerCommand(
-    "sharecode.takeCodeSnapshot",
+    "codechitra.takeCodeSnapshot",
     async () => {
       const editor = vscode.window.activeTextEditor;
 
@@ -22,7 +22,6 @@ export function activate(context: vscode.ExtensionContext) {
         return;
       }
 
-      // STEP 1: Save dialog
       const saveUri = await vscode.window.showSaveDialog({
         title: "Save Code Snapshot",
         defaultUri: vscode.Uri.file("code-snapshot.png"),
@@ -32,10 +31,9 @@ export function activate(context: vscode.ExtensionContext) {
       });
 
       if (!saveUri) {
-        return; // User cancelled
+        return;
       }
 
-      // 2️⃣ Escape HTML to prevent tags from being parsed
       const escapedCode = code
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
@@ -43,14 +41,12 @@ export function activate(context: vscode.ExtensionContext) {
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
 
-      // 3️⃣ Read HTML template from dist
       const templatePath = path.join(context.extensionPath, "dist", "template.html");
       let html = fs.readFileSync(templatePath, "utf-8");
 
       html = html.replace("{{CODE}}", () => escapedCode);
       html = html.replace("{{FILENAME}}", () => path.basename(editor.document.fileName));
 
-      // 4️⃣ Puppeteer → Image
       const browser = await puppeteer.launch({
         headless: true,
         args: ["--no-sandbox", "--disable-setuid-sandbox"]
@@ -58,12 +54,13 @@ export function activate(context: vscode.ExtensionContext) {
 
       const page = await browser.newPage();
 
-      // Important: set viewport to avoid cropped screenshot
       await page.setViewport({ width: 1400, height: 3000, deviceScaleFactor: 2 });
 
-      await page.setContent(html, { waitUntil: "networkidle0" });
+      await page.setContent(html, {
+        waitUntil: "networkidle2",
+        timeout: 60000
+      });
 
-      // ✅ Clip the body (includes padding/shadow) instead of just the container
       const container = await page.$("body");
 
       if (container) {
@@ -81,11 +78,9 @@ export function activate(context: vscode.ExtensionContext) {
             omitBackground: true,
           });
         } else {
-          // fallback
           await page.screenshot({ path: saveUri.fsPath, fullPage: true });
         }
       } else {
-        // fallback
         await page.screenshot({ path: saveUri.fsPath, fullPage: true });
       }
 
