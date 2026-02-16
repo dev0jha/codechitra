@@ -1,43 +1,41 @@
-# CodeChitra
+# CodeChitra 📸
 
-**CodeChitra** is a VS Code extension that allows you to take beautiful, high-quality snapshots of your code snippets instantly. Perfect for sharing on social media, documentation, or presentations.
+A VS Code extension for creating beautiful code snapshots with glassmorphism design.
 
 ## ✨ Features
 
-- **Glassmorphism Design**: Beautiful, modern window frame with a glassmorphism effect.
-- **Syntax Highlighting**: Built-in syntax highlighting using Prism.js.
-- **Dynamic File Naming**: Automatically detects and displays the filename in the snapshot header.
-- **High Resolution**: Captures snapshots using Puppeteer for crisp, high-quality images.
-- **Easy to Use**: Simple command-based workflow to save snapshots directly to your machine.
+- 🎨 Glassmorphism design with modern aesthetics
+- 🌈 Syntax highlighting powered by Prism.js
+- 📁 Automatic filename detection
+- 🖼️ High-resolution output via Puppeteer
+- ⚡ One-command snapshot creation
 
-## 📸 Preview
+## 🚀 Quick Start
 
-![CodeChitra Snapshot](public/template.png)
+1. Select code in VS Code
+2. Open Command Palette (`Ctrl+Shift+P`)
+3. Run **"ShareCode"**
+4. Save your snapshot!
 
-## 🚀 How to Use
+## 📦 Installation
 
-1.  Open any file in VS Code.
-2.  Select the code block you want to capture.
-3.  Open the Command Palette (`Ctrl+Shift+P` or `Cmd+Shift+P`).
-4.  Type and select **"ShareCode"**.
-5.  Choose a location to save your `.png` file.
-6.  Enjoy your beautiful code snapshot!
+**From Marketplace** (coming soon)
+```
+Search "CodeChitra" in VS Code Extensions
+```
 
-## 🛠️ Installation
+**Local Development**
+```bash
+git clone <repo-url>
+npm install
+Press F5 in VS Code
+```
 
-1.  Search for **CodeChitra** in the VS Code Marketplace (coming soon).
-2.  Click **Install**.
+## 🛠️ Tech Stack
 
-*To run locally for development:*
-1.  Clone this repository.
-2.  Run `npm install`.
-3.  Press `F5` to open a new VS Code Window with the extension enabled.
-
-## 📦 Dependencies
-
-- [Puppeteer](https://pptr.dev/): For rendering and capturing the code snapshot.
-- [Prism.js](https://prismjs.com/): For high-quality syntax highlighting.
+- [Puppeteer](https://pptr.dev/) - Snapshot rendering
+- [Prism.js](https://prismjs.com/) - Syntax highlighting
 
 ## 📝 License
 
-This project is licensed under the MIT License.
+MIT License
